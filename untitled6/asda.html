@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pexeso v JavaScriptu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 100px);
+            grid-template-rows: repeat(4, 100px);
+            gap: 10px;
+            margin: 20px auto;
+        }
+        .card {
+            width: 100px;
+            height: 100px;
+            background-color: #ccc;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .flipped {
+            background-color: #fff;
+            transform: rotateY(180deg);
+        }
+        .matched {
+            background-color: #4CAF50;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-board" id="gameBoard"></div>
+
+<script src="pexeso.js"></script>
+</body>
+</html>
