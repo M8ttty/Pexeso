@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pexeso</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #FFF0F5; /* Hnědé pozadí */
+        }
+        .herni-deska {
+            display: grid;
+            grid-template-columns: repeat(4, 100px);
+            grid-gap: 10px;
+        }
+        .karta {
+            width: 100px;
+            height: 100px;
+            background-color: #228B22; /* Zelené karty */
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 5px;
+            user-select: none;
+        }
+        .otocena {
+            background-color: #fff;
+            color: #228B22; /* Zelený text při otočení */
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+<div class="herni-deska" id="herniDeska"></div>
+
+<script>
+    const herniDeska = document.getElementById('herniDeska');
+    const hodnotyKaret = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+    let karty = [...hodnotyKaret, ...hodnotyKaret]; // Duplikace hodnot pro páry
+    let otoceneKarty = [];
+    let nalezenePary = 0;
+
+    // Zamíchat karty
+    karty = karty.sort(() => 0.5 - Math.random());
+
+    // Vytvoření karet a přidání na herní desku
+    karty.forEach((hodnota, index) => {
+        const karta = document.createElement('div');
+        karta.classList.add('karta');
+        karta.dataset.hodnota = hodnota;
+        karta.dataset.index = index;
+        karta.textContent = '';
+
+        karta.addEventListener('click', () => otocitKartu(karta));
+
+        herniDeska.appendChild(karta);
+    });
+
+    function otocitKartu(karta) {
+        if (karta.classList.contains('otocena') || otoceneKarty.length === 2) {
+            return;
+        }
+
+        karta.classList.add('otocena');
+        karta.textContent = karta.dataset.hodnota;
+        otoceneKarty.push(karta);
+
+        if (otoceneKarty.length === 2) {
+            zkontrolovatShodu();
+        }
+    }
+
+    function zkontrolovatShodu() {
+        const [karta1, karta2] = otoceneKarty;
+
+        if (karta1.dataset.hodnota === karta2.dataset.hodnota) {
+            nalezenePary++;
+            otoceneKarty = [];
+
+            if (nalezenePary === hodnotyKaret.length) {
+                setTimeout(() => alert('Vyhráli jste!'), 500);
+            }
+        } else {
+            setTimeout(() => {
+                karta1.classList.remove('otocena');
+                karta2.classList.remove('otocena');
+                karta1.textContent = '';
+                karta2.textContent = '';
+                otoceneKarty = [];
+            }, 1000);
+        }
+    }
+
+
+
+    // Časovač hry
+    let zbyvajiciCas = 60; // 1 minuta
+    const intervalCasovace = setInterval(() => {
+        if (zbyvajiciCas > 0) {
+            zbyvajiciCas--;
+            document.title = `Zbývající čas: ${zbyvajiciCas}s`;
+        } else {
+            clearInterval(intervalCasovace);
+            alert('Čas vypršel!');
+            window.location.reload();
+        }
+    }, 1000);
+</script>
+</body>
+</html>
